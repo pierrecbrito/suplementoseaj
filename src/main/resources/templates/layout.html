@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head(${title})">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+<head th:replace="fragments/head :: head">
+    <title>Default Title</title>
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
     
-    <div th:fragment="content">
-
-    </div>
+    <!-- Content section -->
+    <main>
+        <div th:replace="${content}">
+            <!-- Default content -->
+            <p>Default content</p>
+        </div>
+    </main>
     
     <div th:replace="fragments/footer :: footer"></div>
     
