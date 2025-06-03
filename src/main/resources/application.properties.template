@@ -7,3 +7,9 @@ spring.jpa.show-sql=true
 spring.datasource.url=jdbc:postgresql://localhost:5432/suplementoseaj?serverTimezone=UTC
 spring.datasource.username=postgres
 spring.datasource.password=****
+spring.thymeleaf.cache=false
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+spring.thymeleaf.mode=HTML
+spring.thymeleaf.encoding=UTF-8
+server.port=8080
