@@ -6,4 +6,4 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.datasource.url=jdbc:postgresql://localhost:5432/suplementoseaj?serverTimezone=UTC
 spring.datasource.username=postgres
-spring.datasource.password=P13rr3Br1t0
+spring.datasource.password=****
