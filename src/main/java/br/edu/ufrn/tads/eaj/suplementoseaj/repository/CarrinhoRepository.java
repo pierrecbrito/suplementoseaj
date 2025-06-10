@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface CarrinhoRepository extends JpaRepository<Carrinho, Long> {
-
     @Query("SELECT c FROM Carrinho c WHERE c.usuario.id = :usuarioId")
     Carrinho findByUsuarioId(@Param("usuarioId") Long usuarioId);
 }

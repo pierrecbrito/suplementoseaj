@@ -2189,7 +2189,22 @@ textarea.input {
   }
 }
 
-#store .row:first-child {
+#store .row {
   display: flex;
   flex-wrap: wrap;
+}
+
+.product-img {
+  text-align: center;
+  padding-top: 14px;
+  max-height: 160px;
+  overflow: contain;
+}
+
+.product-img img {
+  max-width: 160px;
+  max-height: 160px;
+  object-fit: contain;
+  object-position: center;
+  margin: 0 auto;
 }

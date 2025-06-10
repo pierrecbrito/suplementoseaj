@@ -2,13 +2,13 @@
     <div id="top-header">
         <div class="container">
             <ul class="header-links pull-left">
-                <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-                <li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-                <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+                <li><a href="#"><i class="fa fa-phone"></i> 84987210669</a></li>
+                <li><a href="#"><i class="fa fa-envelope-o"></i>carlospierre07@gmail.com</a></li>
+                <li><a href="#"><i class="fa fa-map-marker"></i> Macaíba/RN</a></li>
             </ul>
             <ul class="header-links pull-right">
-                <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-                <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+                <li><a href="#">R$</a></li>
+                <li><a href="#"><i class="fa fa-user-o"></i> Minha Conta</a></li>
             </ul>
         </div>
     </div>
@@ -40,35 +40,28 @@
 
                 <div class="col-md-3 clearfix">
                     <div class="header-ctn">
-                        <div>
-                            <a href="#" th:href="@{/wishlist}">
-                                <i class="fa fa-heart-o"></i>
-                                <span>Your Wishlist</span>
-                                <div class="qty">0</div>
-                            </a>
-                        </div>
                         <div class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" th:href="@{/verCarrinho}">
                                 <i class="fa fa-shopping-cart"></i>
-                                <span>Your Cart</span>
-                                <div class="qty" th:text="${quantidadeItens}"></div>
+                                <span>Carrinho</span>
+                                <div class="qty" th:text="${quantidadeItensCarrinho}"></div>
                             </a>
                             <div class="cart-dropdown">
                                 <div class="cart-list">
-                                    <div class="product-widget" th:each="item : ${cartItems}">
+                                    <div class="product-widget" th:each="item : ${carrinho.itens}">
                                         <div class="product-img">
-                                            <img src="./img/product01.png" th:src="@{'/img/' + ${item.product.image}}" alt="Product Image">
+                                            <img th:src="@{${item.suplemento.imagemUri}}" alt="Product Image">
                                         </div>
                                         <div class="product-body">
-                                            <h3 class="product-name"><a href="#" th:href="@{'/product/' + ${item.product.id}}" th:text="${item.product.name}">product name</a></h3>
-                                            <h4 class="product-price"><span class="qty" th:text="${item.quantity} + 'x'">1x</span><span th:text="'$' + ${item.product.price}">$980.00</span></h4>
+                                            <h3 class="product-name"><a href="#" th:text="${item.suplemento.nome}">product name</a></h3>
+                                            <h4 class="product-price"><span class="qty" th:text="${item.quantidade} + 'x'"></span><span th:text="'R$ ' + ${#numbers.formatDecimal(item.suplemento.preco, 1, 'POINT', 2, 'COMMA')}">$980.00</span></h4>
                                         </div>
                                         <button class="delete" th:data-id="${item.id}"><i class="fa fa-close"></i></button>
                                     </div>
                                 </div>
                                 <div class="cart-summary">
-                                    <small th:text="${cartItemCount ?: 0} + ' Item(s) selected'">3 Item(s) selected</small>
-                                    <h5 th:text="'SUBTOTAL: $' + ${cartTotal ?: '0.00'}">SUBTOTAL: $2940.00</h5>
+                                    <small th:text="${quantidadeItensCarrinho} + ' itens selecionados'"></small>
+                                    <h5 th:text="'TOTAL: R$ ' + ${#numbers.formatDecimal(subtotalCarrinho, 1, 'POINT', 2, 'COMMA')}"></h5>
                                 </div>
                                 <div class="cart-btns">
                                     <a href="#" th:href="@{/cart}">View Cart</a>
