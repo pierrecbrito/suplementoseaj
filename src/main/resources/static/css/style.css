@@ -2188,3 +2188,8 @@ textarea.input {
     margin-top: 10px;
   }
 }
+
+#store .row:first-child {
+  display: flex;
+  flex-wrap: wrap;
+}
