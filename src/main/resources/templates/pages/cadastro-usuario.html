@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout-admin :: layout-admin(~{::div.content})}">
+<body>
+    <div class="content">
+        <div class="section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="text-center">Cadastro de Usuário</h3>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${mensagemErro}" class="alert alert-danger">
+                                    <span th:text="${mensagemErro}"></span>
+                                </div>
+                                
+                                <form th:action="@{/salvarusuario}" th:object="${usuario}" method="post">
+                                    <div class="form-group">
+                                        <label for="nome">Nome Completo</label>
+                                        <input type="text" id="nome" th:field="*{nome}" class="form-control" required>
+                                        <div th:if="${#fields.hasErrors('nome')}" class="text-danger" th:errors="*{nome}"></div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="email">E-mail</label>
+                                        <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                                        <div th:if="${#fields.hasErrors('email')}" class="text-danger" th:errors="*{email}"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="username">Nome de Usuário</label>
+                                        <input type="text" id="username" th:field="*{username}" class="form-control" required>
+                                        <div th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="password">Senha</label>
+                                        <input type="password" id="password" th:field="*{password}" class="form-control" required>
+                                        <div th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-checkbox">
+                                            <input type="checkbox" id="admin" th:field="*{admin}">
+                                            <label for="admin">
+                                                <span></span>
+                                                Usuário é Administrador
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <button type="submit" class="primary-btn order-submit w-100">Cadastrar</button>
+                                    </div>
+                                </form>
+                                
+                                <div class="text-center mt-3">
+                                    <p>Já possui uma conta? <a th:href="@{/login}">Faça login</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

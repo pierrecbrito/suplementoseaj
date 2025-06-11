@@ -196,11 +196,7 @@ textarea.input {
   display: block;
 }
 
-.input-radio input[type="radio"]:not(:checked), .input-radio input[type="radio"]:checked, .input-checkbox input[type="checkbox"]:not(:checked), .input-checkbox input[type="checkbox"]:checked {
-  position: absolute;
-  margin-left: -9999px;
-  visibility: hidden;
-}
+
 
 .input-radio label, .input-checkbox label {
   font-weight: 500;
