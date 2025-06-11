@@ -6,6 +6,8 @@ import br.edu.ufrn.tads.eaj.suplementoseaj.service.SuplementoService;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +25,7 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String index(Model model, HttpSession session) {
+    public String index(@AuthenticationPrincipal UserDetails userDetails, Model model, HttpSession session) {
         List<Suplemento> suplementos = suplementoService.listarSuplementosAtivos();
         model.addAttribute("suplementos", suplementos);
 
@@ -41,6 +43,10 @@ public class IndexController {
         model.addAttribute("subtotalCarrinho", carrinho.getItens().stream()
                 .mapToDouble(item -> item.getSuplemento().getPreco() * item.getQuantidade())
                 .sum());
+
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
         
         return "pages/index";
     }

@@ -5,6 +5,8 @@ import br.edu.ufrn.tads.eaj.suplementoseaj.service.SuplementoService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,17 +29,26 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String adminPanel(Model model) {
+    public String adminPanel(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         List<Suplemento> suplementos = suplementoService.listarTodosSuplementos();
         model.addAttribute("suplementos", suplementos);
+
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
         
         return "pages/admin";
     }
     
      @GetMapping("/cadastro")
-    public String exibirFormularioCadastro(Model model) {
+    public String exibirFormularioCadastro(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         model.addAttribute("suplemento", new Suplemento());
         model.addAttribute("imagens", suplementoService.listarImagensURIs());
+
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
+
         return "pages/cadastro";
     }
 
@@ -71,7 +82,7 @@ public class AdminController {
     }
 
     @GetMapping("/editar")
-    public String exibirFormularioEdicao(@RequestParam("suplementoId") Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String exibirFormularioEdicao(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("suplementoId") Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Optional<Suplemento> suplementoOptional = suplementoService.buscarPorId(id);
             
@@ -79,6 +90,10 @@ public class AdminController {
                 model.addAttribute("suplemento", suplementoOptional.get());
                 model.addAttribute("modoEdicao", true);
                 model.addAttribute("imagens", suplementoService.listarImagensURIs());
+                if (userDetails != null) {
+                    model.addAttribute("username", userDetails.getUsername());
+                }
+
                 return "pages/cadastro";
             } else {
                 redirectAttributes.addFlashAttribute("erro", "Suplemento não encontrado!");

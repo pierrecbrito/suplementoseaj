@@ -7,6 +7,8 @@ import br.edu.ufrn.tads.eaj.suplementoseaj.service.SuplementoService;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,15 +81,27 @@ public class CarrinhoController {
 
 
     @GetMapping("/verCarrinho")
-    public String verCarrinho(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+    public String verCarrinho(@AuthenticationPrincipal UserDetails userDetails, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Carrinho carrinho = (Carrinho) session.getAttribute("carrinho");
         
         if (carrinho == null || carrinho.getItens().isEmpty()) {
             redirectAttributes.addFlashAttribute("erro", "Carrinho vazio.");
             return "redirect:/";
         }
+
         
+        model.addAttribute("quantidadeItensCarrinho", carrinho.getItens().stream()
+                .mapToInt(item -> item.getQuantidade())
+                .sum());
         model.addAttribute("carrinho", carrinho);
+        model.addAttribute("subtotalCarrinho", carrinho.getItens().stream()
+                .mapToDouble(item -> item.getSuplemento().getPreco() * item.getQuantidade())
+                .sum());
+        
+
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
         
         return "pages/carrinho";
     }
@@ -101,7 +115,7 @@ public class CarrinhoController {
             return "redirect:/";
         }
 
-        session.invalidate();
+        session.removeAttribute("carrinho");
         redirectAttributes.addFlashAttribute("mensagem", "Compra finalizada com sucesso! Obrigado pela preferência.");
         
         return "redirect:/";

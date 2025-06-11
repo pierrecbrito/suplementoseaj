@@ -2204,3 +2204,9 @@ textarea.input {
   object-position: center;
   margin: 0 auto;
 }
+
+.add-to-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
