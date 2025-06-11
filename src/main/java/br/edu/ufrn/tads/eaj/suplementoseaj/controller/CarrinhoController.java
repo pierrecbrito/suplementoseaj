@@ -1,78 +1,109 @@
 package br.edu.ufrn.tads.eaj.suplementoseaj.controller;
 
 import br.edu.ufrn.tads.eaj.suplementoseaj.domain.Carrinho;
-import br.edu.ufrn.tads.eaj.suplementoseaj.service.CarrinhoService;
+import br.edu.ufrn.tads.eaj.suplementoseaj.domain.CarrinhoItem;
+import br.edu.ufrn.tads.eaj.suplementoseaj.domain.Suplemento;
+import br.edu.ufrn.tads.eaj.suplementoseaj.service.SuplementoService;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 @Controller
 public class CarrinhoController {
-    
+
     @Autowired
-    private CarrinhoService carrinhoService;
-    
-    /**
-     * Adiciona um item ao carrinho ou incrementa sua quantidade se já existir
-     */
+    private SuplementoService suplementoService;
+
     @GetMapping("/adicionarCarrinho")
-    public String adicionarItemCarrinho(
-            @RequestParam Long suplementoId,
-            @RequestParam(defaultValue = "1") Integer quantidade) {
+    public String adicionarAoCarrinho(
+            @RequestParam("suplementoId") Long id,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         
-        Carrinho carrinhoAtualizado = carrinhoService.adicionarCarrinho(1L, suplementoId, quantidade);
+        try {
+            Optional<Suplemento> suplementoOpt = suplementoService.buscarPorId(id);
+            
+            if (suplementoOpt.isPresent()) {
+                Suplemento suplemento = suplementoOpt.get();
+                
+                Carrinho carrinho = (Carrinho) session.getAttribute("carrinho");
+                
+                if (carrinho == null) {
+                    carrinho = new Carrinho();
+                    session.setAttribute("carrinho", carrinho);
+                }
+                
+                boolean itemExistente = false;
+                
+                for (CarrinhoItem item : carrinho.getItens()) {
+                    if (item.getSuplemento().getId().equals(suplemento.getId())) {
+                        item.setQuantidade(item.getQuantidade() + 1);
+                        itemExistente = true;
+                        break;
+                    }
+                }
+                
+                if (!itemExistente) {
+                    carrinho.getItens().add(new CarrinhoItem(suplemento, 1));
+                }
+                
+                double total = 0.0;
+                for (CarrinhoItem item : carrinho.getItens()) {
+                    total += item.getSuplemento().getPreco() * item.getQuantidade();
+                }
+                carrinho.setTotal(total);
+                
+                redirectAttributes.addFlashAttribute("mensagem", 
+                        "Produto adicionado ao carrinho com sucesso!");
+                
+            } else {
+                redirectAttributes.addFlashAttribute("erro", 
+                        "Produto não encontrado. ID: " + id);
+            }
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erro", 
+                    "Erro ao adicionar produto ao carrinho: " + e.getMessage());
+        }
+        
         return "redirect:/";
     }
     
-    /**
-     * Recupera o carrinho do usuário
-     */
+
+
     @GetMapping("/verCarrinho")
-    public ResponseEntity<Carrinho> getCarrinho(@PathVariable Long usuarioId) {
-        Carrinho carrinho = carrinhoService.getCarrinhoByUsuario(usuarioId);
-        if (carrinho == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(carrinho, HttpStatus.OK);
-    }
-    
-    /**
-     * Remove um item do carrinho
-     */
-    @DeleteMapping("/remover")
-    public ResponseEntity<Carrinho> removerItemCarrinho(
-            @RequestParam Long usuarioId,
-            @RequestParam Long suplementoId) {
+    public String verCarrinho(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        Carrinho carrinho = (Carrinho) session.getAttribute("carrinho");
         
-        Carrinho carrinhoAtualizado = carrinhoService.removerDoCarrinho(usuarioId, suplementoId);
-        return new ResponseEntity<>(carrinhoAtualizado, HttpStatus.OK);
-    }
-    
-    /**
-     * Atualiza a quantidade de um item no carrinho
-     */
-    @PutMapping("/atualizarCarrinho")
-    public ResponseEntity<Carrinho> atualizarQuantidade(
-            @RequestParam Long usuarioId,
-            @RequestParam Long suplementoId,
-            @RequestParam Integer quantidade) {
-        
-        if (quantidade <= 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (carrinho == null || carrinho.getItens().isEmpty()) {
+            redirectAttributes.addFlashAttribute("erro", "Carrinho vazio.");
+            return "redirect:/";
         }
         
-        Carrinho carrinhoAtualizado = carrinhoService.atualizarQuantidade(usuarioId, suplementoId, quantidade);
-        return new ResponseEntity<>(carrinhoAtualizado, HttpStatus.OK);
+        model.addAttribute("carrinho", carrinho);
+        
+        return "pages/carrinho";
     }
     
-    /**
-     * Esvazia o carrinho
-     */
-    @DeleteMapping("/limparCarrinho/{usuarioId}")
-    public ResponseEntity<Void> limparCarrinho(@PathVariable Long usuarioId) {
-        carrinhoService.limparCarrinho(usuarioId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/finalizarCompra")
+    public String finalizarCompra(HttpSession session, RedirectAttributes redirectAttributes) {
+        Carrinho carrinho = (Carrinho) session.getAttribute("carrinho");
+        
+        if (carrinho == null || carrinho.getItens().isEmpty()) {
+            redirectAttributes.addFlashAttribute("erro", "Carrinho vazio.");
+            return "redirect:/";
+        }
+
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("mensagem", "Compra finalizada com sucesso! Obrigado pela preferência.");
+        
+        return "redirect:/";
     }
 }

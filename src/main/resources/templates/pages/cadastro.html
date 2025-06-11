@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout-admin :: layout-admin(~{::div.content})}">
+<body>
+    <div class="content">
+        <style>
+            .input-group {
+                width: 100%;
+            }
+        </style>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 mx-auto">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="text-center">Cadastrar Novo Suplemento</h3>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+                                
+                                <form th:action="@{/salvar}" th:object="${suplemento}" 
+                                      method="post" enctype="multipart/form-data">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="nome" class="form-label">Nome do Suplemento*</label>
+                                            <input type="text" class="form-control" id="nome" th:field="*{nome}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">
+                                                O nome do suplemento é obrigatório.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="marca" class="form-label">Marca*</label>
+                                            <input type="text" class="form-control" id="marca" th:field="*{marca}">
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}">
+                                                A marca é obrigatória.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="mb-3 col-md-4">
+                                            <label for="categoria" class="form-label">Categoria*</label>
+                                            <select class="form-control w-100" id="categoria" th:field="*{categoria}">
+                                                <option value="" selected disabled>Selecione uma categoria</option>
+                                                <option value="Proteína">Proteína</option>
+                                                <option value="Creatina">Creatina</option>
+                                                <option value="Pré-Treino">Pré-Treino</option>
+                                                <option value="Aminoácidos">Aminoácidos</option>
+                                                <option value="Multivitamínico">Multivitamínico</option>
+                                                <option value="Termogênico">Termogênico</option>
+                                                <option value="Outros">Outros</option>
+                                            </select>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}">
+                                                A categoria é obrigatória.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="preco" class="form-label">Preço (R$)*</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control w-100" id="preco" th:field="*{preco}" step="0.01" min="0.01">
+                                            </div>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}">
+                                                O preço deve ser positivo.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="peso" class="form-label">Peso (g)*</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control w-100" id="peso" th:field="*{peso}" step="0.01" min="0.01">
+                                            </div>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('peso')}" th:errors="*{peso}">
+                                                O peso deve ser positivo.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descricao" class="form-label">Descrição*</label>
+                                        <textarea class="form-control" id="descricao" th:field="*{descricao}" rows="2"></textarea>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">
+                                            A descrição é obrigatória.
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="imagem" class="form-label">Imagem*</label>
+                                        <select class="form-control w-100" id="imagem" th:field="*{imagemUri}">
+                                            <option value="" selected disabled>Selecione uma categoria</option>
+                                            <option th:each="imagem : ${imagens}" 
+                                                    th:value="${imagem}" 
+                                                    th:text="${imagem}">Imagem</option>
+                                        </select>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('imagemUri')}" th:errors="*{imagemUri}">
+                                            A imagem é obrigatória.
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between mt-4" style="margin-top: 2em;">
+                                        <a th:href="@{/admin}" class="btn btn-secondary">
+                                            <i class="fa fa-arrow-left"></i> Cancelar
+                                        </a>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fa fa-plus-circle"></i> Salvar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -52,4 +52,12 @@ public class SuplementoService {
     public void salvarSuplemento(Suplemento suplemento) {
         suplementoRepository.save(suplemento);
     }
+
+    public List<String> listarImagensURIs() {
+        List<Suplemento> suplementos = suplementoRepository.findAll();
+        return suplementos.stream()
+                .map(Suplemento::getImagemUri)
+                .filter(uri -> uri != null && !uri.isEmpty())
+                .toList();
+    }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::div.content})}">
+<body>
+    <div class="content">
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section-title">
+                            <h3 class="title">Meu Carrinho</h3>
+                        </div>
+
+                        <!-- Mensagem se o carrinho estiver vazio -->
+                        <div th:if="${#lists.isEmpty(carrinho.itens)}" class="alert alert-info">
+                            <p>Seu carrinho está vazio. <a th:href="@{/index}" class="primary-btn">Continue comprando</a></p>
+                        </div>
+
+                        <!-- Conteúdo do carrinho -->
+                        <div th:if="${!#lists.isEmpty(carrinho.itens)}" class="order-summary">
+                            <div class="order-products">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Preço Unitário</th>
+                                            <th>Quantidade</th>
+                                            <th>Subtotal</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="item : ${carrinho.itens}">
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img th:src="@{${item.suplemento.imagemUri}}" alt="Imagem do produto" class="img-cart" style="max-width: 80px; margin-right: 15px;">
+                                                    <div>
+                                                        <h4 class="product-name" th:text="${item.suplemento.nome}" style="margin-top: 18px;">Nome do Produto</h4>
+                                                        <p class="product-category" th:text="${item.suplemento.categoria}">Categoria</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td th:text="'R$ ' + ${#numbers.formatDecimal(item.suplemento.preco, 1, 'POINT', 2, 'COMMA')}">R$ 99,90</td>
+                                            <td>
+                                                <div class="input-group qty-input" style="max-width: 120px;">
+                                                    <span class="qty" th:text="${item.quantidade}" style="padding: 0 10px;">1</span>
+                                                </div>
+                                            </td>
+                                            <td th:text="'R$ ' + ${#numbers.formatDecimal(item.suplemento.preco * item.quantidade, 1, 'POINT', 2, 'COMMA')}">R$ 99,90</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a th:href="@{/}" class="primary-btn">Continue Comprando</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="order-col">
+                                        <div><strong>TOTAL</strong></div>
+                                        <div><strong class="order-total" th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.total, 1, 'POINT', 2, 'COMMA')}">R$ 399,99</strong></div>
+                                    </div>
+                                    <a th:href="@{/finalizarCompra}" class="primary-btn order-submit">Finalizar Compra</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</body>
+</html>

@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout-admin(content)">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
 <head th:replace="fragments/head :: head">
-    <title>Default Title</title>
+    <title>SuplementoEAJ</title>
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
     
-    <!-- Content section -->
     <main>
         <div th:replace="${content}">
-            <!-- Default content -->
             <p>Default content</p>
         </div>
     </main>

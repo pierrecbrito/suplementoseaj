@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout-admin :: layout(~{::div.content})}">
+      th:replace="~{layout-admin :: layout-admin(~{::div.content})}">
 <body>
     <div class="content">
 		<style>
@@ -46,7 +46,7 @@
                                         <td th:text="'R$ ' + ${#numbers.formatDecimal(suplemento.preco, 1, 'POINT', 2, 'COMMA')}" class="text-center">R$ 99,99</td>
                                         <td class="text-center">
                                             <div class="d-flex gap-2" role="group">
-                                                <a class="btn btn-info btn-sm" th:href="@{/restaurar(suplementoId=${suplemento.id})}">
+                                                <a class="btn btn-info btn-sm" th:href="@{/restaurar(suplementoId=${suplemento.id})}" th:if="${suplemento.isDeleted != null}">
                                                     <i class="fa fa-eye"></i> Restaurar
                                                 </a>
                                                 
@@ -66,9 +66,7 @@
                         <div th:if="${#lists.isEmpty(suplementos)}" class="alert alert-info">
                             Nenhum suplemento encontrado no sistema.
                         </div>
-                        
-                        
-                        
+                                        
                     </div>
                 </div>
             </div>

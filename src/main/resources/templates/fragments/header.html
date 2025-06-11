@@ -56,7 +56,6 @@
                                             <h3 class="product-name"><a href="#" th:text="${item.suplemento.nome}">product name</a></h3>
                                             <h4 class="product-price"><span class="qty" th:text="${item.quantidade} + 'x'"></span><span th:text="'R$ ' + ${#numbers.formatDecimal(item.suplemento.preco, 1, 'POINT', 2, 'COMMA')}">$980.00</span></h4>
                                         </div>
-                                        <button class="delete" th:data-id="${item.id}"><i class="fa fa-close"></i></button>
                                     </div>
                                 </div>
                                 <div class="cart-summary">
@@ -64,8 +63,8 @@
                                     <h5 th:text="'TOTAL: R$ ' + ${#numbers.formatDecimal(subtotalCarrinho, 1, 'POINT', 2, 'COMMA')}"></h5>
                                 </div>
                                 <div class="cart-btns">
-                                    <a href="#" th:href="@{/cart}">View Cart</a>
-                                    <a href="#" th:href="@{/checkout}">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                    <a href="#" th:href="@{/verCarrinho}">Ver carrinho</a>
+                                    <a href="#" th:href="@{/finalizarCompra}">Finalizar <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
                         </div>

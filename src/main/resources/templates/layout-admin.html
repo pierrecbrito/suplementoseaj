@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout-admin(content)">
 <head th:replace="fragments/head :: head">
     <title>SuplementosEAJ</title>
 </head>
@@ -7,10 +7,8 @@
     
     <div th:replace="fragments/header-admin :: header"></div> 
     
-    <!-- Content section -->
     <main>
         <div th:replace="${content}">
-            <!-- Default content -->
             <p>Default content</p>
         </div>
     </main>
