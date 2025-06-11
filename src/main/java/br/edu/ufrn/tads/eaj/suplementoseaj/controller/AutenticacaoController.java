@@ -54,6 +54,11 @@ public class AutenticacaoController {
     
     @GetMapping("/acesso-negado")
     public String acessoNegado() {
-        return "acesso-negado";
+        return "pages/acesso-negado";
+    }
+
+    @GetMapping("/logout-page")
+    public String logout() {
+        return "pages/logout";
     }
 }

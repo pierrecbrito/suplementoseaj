@@ -37,7 +37,7 @@ public class SecurityConfig {
         return http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/img/**", "/","/cadusuario", "/login", "/fonts/**", "/salvarusuario").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/img/**", "/", "/login", "/fonts/**", "/cadusuario", "/salvarusuario").permitAll()
                 .requestMatchers("/admin/**", "/cadastro", "/salvar", "/editar/**", "/deletar/**", "/restaurar/**").hasRole("ADMIN")
                 .requestMatchers("/verCarrinho", "/adicionarCarrinho/**", "/finalizarCompra").hasRole("USER")
                 .anyRequest().authenticated()
@@ -49,7 +49,7 @@ public class SecurityConfig {
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/logout-page")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .permitAll()
